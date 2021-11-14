@@ -30,8 +30,8 @@ export const NewAccount = ({ openRegisterFunc }) => {
   }, [])
 
   return(
-    <div className="fixed w-full h-full top-0 left-0 z-10 backdrop-filter backdrop-blur-sm flex justify-center items-center">
-      <div className="w-96 border-2 bg-white pb-5">
+    <div className="fixed w-full h-full top-0 left-0 z-10 backdrop-filter backdrop-blur-md flex justify-center items-center">
+      <div className="w-96 border-2 bg-white pb-5 z-20">
         <div className="flex justify-between px-5 pt-5">
           <h1 className="text-3xl">Sign Up</h1>
           <span className="material-icons flex justify-center items-center cursor-pointer" onClick={()=>{openRegisterFunc(false)}}>close</span>
@@ -70,7 +70,7 @@ export const NewAccount = ({ openRegisterFunc }) => {
           <div className="flex justify-between">
             <div className="w-24 h-8 border-2 flex justify-between items-center px-3 rounded-md">
               <label htmlFor="female" className="h-full">female</label>
-              <input type="radio" name="sex" value="female" id="female" onChange={()=>{setCustomSection(false)}} require />
+              <input type="radio" name="sex" value="female" id="female" onChange={()=>{setCustomSection(false)}} required />
             </div>
             <div className="w-24 h-8 border-2 flex justify-between items-center px-3 rounded-md">
               <label htmlFor="male" className="h-full">male</label>

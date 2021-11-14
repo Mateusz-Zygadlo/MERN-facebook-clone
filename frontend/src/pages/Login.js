@@ -11,8 +11,8 @@ export const Login = () => {
 
   return(
     <>
-      <div className="w-screen h-screen pt-52 bg-gray-100 flex justify-center items-start">
-        <div className="mr-36">
+      <div className="w-screen flex h-screen bg-gray-100 flex-col items-center justify-start pt-24 lg:justify-center lg:items-start lg:flex-row lg:pt-56">
+        <div className="mb-10 lg:mr-36">
           <img src={FacebookLogo} alt="Facebook logo" className="w-80 h-28" />
           <h1 className="text-2xl w-96 pl-10">Connect with friends and the world around you on Facebook.</h1>
         </div>
