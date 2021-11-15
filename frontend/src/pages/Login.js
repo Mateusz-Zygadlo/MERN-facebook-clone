@@ -25,6 +25,9 @@ export const Login = () => {
           <div className="w-11/12 my-6 border-t-2 mx-auto flex justify-center">
             <button className="mt-5 w-7/12 h-12 mx-auto rounded-lg bg-green-500 hover:bg-green-600 text-white text-xl" onClick={()=>{setOpenRegister(true)}}>Create new account</button>
           </div>
+          <div className="w-11/12 border-t2 mx-auto flex justify-center">
+            <a href='/auth/facebook' className="mb-3 w-7/12 h-12 flex items-center justify-center mx-auto rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-xl">Login with facebook</a>
+          </div>
         </div>
       </div>
       {openRegister ?

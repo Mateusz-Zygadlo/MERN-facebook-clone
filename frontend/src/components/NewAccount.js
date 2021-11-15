@@ -1,13 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export const NewAccount = ({ openRegisterFunc }) => {
   const [loading, setLoading] = useState(true);
   const [years, setYears] = useState([]);
   const [days, setDays] = useState([]);
+
+  const [register, setRegister] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    month: '',
+    day: '',
+    year: '',
+    sex: '',
+    pronoun: '',
+    genderOptional: '',
+  });
   const [customSection, setCustomSection] = useState(false);
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   
-  function generateArrayOfYears() {
+  const generateArrayOfYears = () => {
     const newYears = [];
     const newDays = [];
     const max = new Date().getFullYear()
@@ -24,6 +38,22 @@ export const NewAccount = ({ openRegisterFunc }) => {
     setYears(newYears);
     setLoading(false);
   }
+  
+  const handleChange = (e) => {
+    const {name,value} = e.target
+
+    setRegister({
+      ...register,
+      [name]:value
+      })
+  }
+
+  const registerUser = (e) => {
+    e.preventDefault();
+
+    axios.post('http://localhost:8000/auth/standard', register)
+      .then((res) => console.log(res))
+  }
 
   useEffect(() => {
     generateArrayOfYears();
@@ -37,28 +67,28 @@ export const NewAccount = ({ openRegisterFunc }) => {
           <span className="material-icons flex justify-center items-center cursor-pointer" onClick={()=>{openRegisterFunc(false)}}>close</span>
         </div>
         <p className="pb-2 pl-5 border-b-2">It’s quick and easy.</p>
-        <form method="post" className="mt-3 mx-5">
+        <form className="mt-3 mx-5">
           <div className="flex justify-between">
-            <input type="text" name="firstName" placeholder="First Name" className="h-10 textIndent w-5/12 border-2 rounded-md" required />
-            <input type="text" name="lastName" placeholder="Last Name" className="h-10 textIndent w-6/12 border-2 rounded-md" required />
+            <input type="text" name="firstName" placeholder="First Name" className="h-10 textIndent w-5/12 border-2 rounded-md" onChange={(e)=>{handleChange(e)}} value={register.firstName} required />
+            <input type="text" name="lastName" placeholder="Last Name" className="h-10 textIndent w-6/12 border-2 rounded-md" onChange={(e)=>{handleChange(e)}} value={register.lastName} required />
           </div>
-          <input type="text" name="email" placeholder="Mobile number or email" className="h-10 mt-2 textIndent w-full border-2 rounded-md" required />
-          <input type="password" name="password" placeholder="New password" className="h-10 mt-2 textIndent w-full border-2 rounded-md" required />
+          <input type="text" name="email" placeholder="Mobile number or email" className="h-10 mt-2 textIndent w-full border-2 rounded-md" onChange={(e)=>{handleChange(e)}} value={register.email} required />
+          <input type="password" name="password" placeholder="New password" className="h-10 mt-2 textIndent w-full border-2 rounded-md" onChange={(e)=>{handleChange(e)}} value={register.password} required />
           <p className="text-sm mt-2">Birthday</p>
           <div className="flex justify-between">
-            <select name="month" className="h-8 w-24 border-2 rounded-md outline-none">
+            <select name="month" className="h-8 w-24 border-2 rounded-md outline-none" onChange={(e)=>{handleChange(e)}} value={register.month}>
               {months.map((month) => (
                 <option key={month}>{month}</option>
               ))}
             </select>
             {loading ? <div>Loading</div> :
               <>
-                <select name="day" className="h-8 w-24 border-2 rounded-md outline-none">
+                <select name="day" className="h-8 w-24 border-2 rounded-md outline-none" onChange={(e)=>{handleChange(e)}} value={register.day}>
                   {days.map((day) => (
                     <option key={day}>{day}</option>
                   ))}
                 </select>
-                <select name="year" className="h-8 w-24 border-2 rounded-md outline-none">
+                <select name="year" className="h-8 w-24 border-2 rounded-md outline-none" onChange={(e)=>{handleChange(e)}} value={register.year}>
                     {years.map((year) => (
                       <option key={year}>{year}</option>
                     ))}
@@ -70,33 +100,33 @@ export const NewAccount = ({ openRegisterFunc }) => {
           <div className="flex justify-between">
             <div className="w-24 h-8 border-2 flex justify-between items-center px-3 rounded-md">
               <label htmlFor="female" className="h-full">female</label>
-              <input type="radio" name="sex" value="female" id="female" onChange={()=>{setCustomSection(false)}} required />
+              <input type="radio" name="sex" value="female" id="female" onChange={(e)=>{setCustomSection(false); handleChange(e)}} required />
             </div>
             <div className="w-24 h-8 border-2 flex justify-between items-center px-3 rounded-md">
               <label htmlFor="male" className="h-full">male</label>
-              <input type="radio" name="sex" id="male" value="male" onChange={()=>{setCustomSection(false)}} />
+              <input type="radio" name="sex" id="male" value="male" onChange={(e)=>{setCustomSection(false); handleChange(e)}} />
             </div>
             <div className="w-24 h-8 border-2 flex justify-between items-center px-3 rounded-md">
               <label htmlFor="custom" className="h-full">Custom</label>
-              <input type="radio" name="sex" id="custom" value="Custom" onChange={()=>{setCustomSection(true)}} />
+              <input type="radio" name="sex" id="custom" value="Custom" onChange={(e)=>{setCustomSection(true); handleChange(e)}} />
             </div>
           </div>
           {customSection ? 
             <>
-              <select name="pronoun" className="h-10 mt-3 w-full border-2 rounded-md outline-none" required>
+              <select name="pronoun" className="h-10 mt-3 w-full border-2 rounded-md outline-none" select="true" onChange={(e)=>{handleChange(e)}}>
                 <option select value disabled>Select your pronoun</option>
                 <option value="She">She: "Wish her a happy birthday!"</option>
                 <option value="He">He: "Wish him a happy birthday!"</option>
                 <option value="They">They: "Wish them a happy birthday!"</option>
               </select>
               <p className="text-sm">Your pronoun is visible to everyone.</p>
-              <input type="text" name="genderOptional" placeholder="Gender (optional)" className="h-10 textIndent w-full mt-2 border-2 rounded-md" />
+              <input type="text" name="genderOptional" placeholder="Gender (optional)" className="h-10 textIndent w-full mt-2 border-2 rounded-md"  onChange={(e)=>{handleChange(e)}} value={register.genderOptional} />
             </> 
           :
             null
           }
           <div className="w-full h-14 mt-3 flex justify-center items-center">
-            <button type="submit" className="bg-green-500 w-44 h-10 rounded-md">Sign up</button>
+            <button type="submit" className="bg-green-500 w-44 text-2xl h-10 rounded-md" onClick={(e)=>{registerUser(e)}}>Sign up</button>
           </div>
         </form>
       </div>
