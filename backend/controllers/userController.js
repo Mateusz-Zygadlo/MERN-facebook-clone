@@ -114,6 +114,7 @@ exports.facebookToken = (req, res, next) => {
       }
 
       const accessToken = jwt.sign(userObj, process.env.SECRET_KEY);
+      localStorage.removeItem('id');
 
       return res
         .cookie('JWT-TOKEN', accessToken, {
@@ -122,8 +123,10 @@ exports.facebookToken = (req, res, next) => {
           expires: new Date(new Date().getTime() + 30 * 1000),
           secure: true,
         })
-        .redirect('/profile')
+        .redirect('/profile');
     })
+  }else{
+    return res.redirect('/');
   }
 }
 
