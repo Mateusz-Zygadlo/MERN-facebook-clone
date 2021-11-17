@@ -38,8 +38,7 @@ export const Login = () => {
   const loginWithFacebook = (e) => {
     e.preventDefault();
 
-    axios.get('http://localhost:8000/auth/facebook')
-      .then((res) => console.log(res.data))
+    window.open("http://localhost:8000/auth/facebook", "_self");
   }
 
   return(
