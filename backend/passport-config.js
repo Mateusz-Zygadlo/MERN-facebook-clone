@@ -21,6 +21,9 @@ exports.facebookAuthenticationUser = (passport, res) => {
           lastName: profile._json.last_name,
           loginWithFacebook: true,
           facebookId: profile._json.id,
+          friends: [],
+          yourInvitations: [],
+          invitations: [],
         }).save((err) => {
           if(err){
             return{

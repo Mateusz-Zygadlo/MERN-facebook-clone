@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 exports.newUser = [
   async (req, res, next) => {
-    const {email, password, genderOptional, picture, firstName, lastName, pronoun, month, day, year, sex} = req.body;
+    const {email, password, picture, firstName, lastName} = req.body;
 
     if(!email || !password){
       return res.json({
@@ -34,13 +34,13 @@ exports.newUser = [
         const user = new User({
           email,
           password: hashedPassword,
-          gender: sex || genderOptional || "",
           picture,
           firstName,
           lastName,
-          pronoun,
-          date: `${day}-${month}-${year}` ,
           loginWithFacebook: false,
+          friends: [],
+          yourInvitations: [],
+          invitations: [],
         }).save((err) => {
           if(err){
             return next(err);
@@ -62,7 +62,6 @@ exports.loginUser = [
 
     if(!user){
       return res.json({
-        title: 'error',
         err: 'User not found',
       })
     }
@@ -72,6 +71,9 @@ exports.loginUser = [
           firstName: user.firstName,
           lastName: user.lastName,
           id: user._id,
+          friends: user.friends,
+          yourInvitations: user.yourInvitations,
+          invitations: user.invitations,
         }
         const accessToken = jwt.sign(userObj, process.env.SECRET_KEY);
 
@@ -111,6 +113,9 @@ exports.facebookToken = (req, res, next) => {
         firstName: result.firstName,
         lastName: result.lastName,
         id: result._id,
+        friends: result.friends,
+        yourInvitations: result.yourInvitations,
+        invitations: result.invitations,
       }
 
       const accessToken = jwt.sign(userObj, process.env.SECRET_KEY);
@@ -123,7 +128,7 @@ exports.facebookToken = (req, res, next) => {
           expires: new Date(new Date().getTime() + 30 * 1000),
           secure: true,
         })
-        .redirect('/profile');
+        .redirect('/auth/refreshToken');
     })
   }else{
     return res.redirect('/');
@@ -150,7 +155,10 @@ exports.refreshToken = (req, res, next) => {
       const userObj = {
         firstName: user.firstName,
         lastName: user.lastName,
-        id: user.id,
+        id: user._id,
+        friends: user.friends,
+        yourInvitations: user.yourInvitations,
+        invitations: user.invitations,
       }
       
       const refreshToken = jwt.sign(userObj, process.env.REFRESH_TOKEN_KEY);

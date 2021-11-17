@@ -14,10 +14,6 @@ const UserSchema = new Schema({
     minLength: 1,
     maxLength: 80,
   },
-  gender: {
-    type: 'string',
-    required: false,
-  },
   picture: {
     type: 'string',
     required: false,
@@ -30,14 +26,6 @@ const UserSchema = new Schema({
     type: 'string',
     required: true,
   },
-  pronoun: {
-    type: 'string',
-    required: false,
-  },
-  date: {
-    type: 'string',
-    required: false,
-  },
   loginWithFacebook: {
     type: 'boolean',
     required: true,
@@ -45,7 +33,19 @@ const UserSchema = new Schema({
   facebookId: {
     type: 'number',
     required: false,
-  }
+  },
+  friends: {
+    type: 'array',
+    required: true,
+  },
+  yourInvitations: {
+    type: 'array',
+    required: true,
+  },
+  invitations: {
+    type: 'array',
+    required: true,
+  },
 })
 
 module.exports = mongoose.model('Users', UserSchema);
