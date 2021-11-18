@@ -22,9 +22,10 @@ router.get('/failed', isRefreshToken, (req, res) => {
 })
 
 router.get('/logout', isRefreshToken, (req, res) => {
+  req.logout();
+
   return res
-    .clearCookie('JWT-REFRESH-TOKEN', {path: '/'})
-    .logout()
+    .clearCookie('JWT-TOKEN', {path: '/'})
     .redirect('http://localhost:3000/')
 })
 

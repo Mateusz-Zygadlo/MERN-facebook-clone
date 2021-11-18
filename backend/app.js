@@ -41,12 +41,6 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  return res.json({
-    title: 'success [index page]',
-  })
-})
-
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 

@@ -21,7 +21,7 @@ export const Navbar = () => {
               <div className="w-10 h-10 bg-black rounded-full mr-2"></div>
               <h1 className="pr-1">Username</h1>
             </div>
-            <a href="logout" className="flex justify-center text-2xl mt-5 mb-2 hover:underline" title="logout">Logout</a>
+            <a href="http://localhost:8000/logout" className="flex justify-center text-2xl mt-5 mb-2 hover:underline" title="logout">Logout</a>
           </div>
         :
           null
