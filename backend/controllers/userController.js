@@ -14,7 +14,7 @@ exports.newUser = [
     const user = await User.findOne({email: email});
 
     if(user != null){
-      return res.redirect('http://localhost:3000/', )
+      return res.redirect('http://localhost:3000/failedRegister', )
     }
 
     const newUser = new User({
@@ -34,7 +34,7 @@ exports.newUser = [
     })
 
     return res
-      .redirect('http://localhost:3000/')
+      .redirect('http://localhost:3000/successRegister')
   }
 ]
 

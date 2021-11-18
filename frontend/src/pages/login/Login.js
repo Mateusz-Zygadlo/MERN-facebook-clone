@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import FacebookLogo from '../assets/FacebookLogo.svg';
-import { NewAccount } from '../components/NewAccount';
+import FacebookLogo from '../../assets/FacebookLogo.svg';
+import { NewAccount } from '../../components/login/NewAccount';
 
 axios.defaults.withCredentials = true;
 
