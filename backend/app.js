@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const passport = require('passport');
+const cors = require('cors');
 const session = require("express-session");
 const authFacebook = require('./passport-config').facebookAuthenticationUser;
-if (typeof localStorage === "undefined" || localStorage === null) {
+if(typeof localStorage === "undefined" || localStorage === null){
   const LocalStorage = require('node-localstorage').LocalStorage;
   localStorage = new LocalStorage('./scratch');
 }
@@ -26,13 +26,20 @@ const app = express();
 authFacebook(passport);
 
 app.use(cookieParser());
-app.use(cors({'origin': '*', credentials: false }));
 app.use(express.json());
 app.use(express.urlencoded());
 
 app.use(session({secret: "secret"}));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 app.get('/', (req, res) => {
   return res.json({

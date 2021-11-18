@@ -6,52 +6,35 @@ const jwt = require('jsonwebtoken');
 
 exports.newUser = [
   async (req, res, next) => {
-    const {email, password, picture, firstName, lastName} = req.body;
+    const {password, firstName, lastName} = req.body;
+    let {email} = req.body;
+    email = email.toLowerCase();
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.findOne({email: email});
 
-    if(!email || !password){
-      return res.json({
-        title: 'not found email or password'
-      })
+    if(user != null){
+      return res.redirect('http://localhost:3000/', )
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    User.find({email: email}).exec((err, result) => {
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      picture: '',
+      firstName,
+      lastName,
+      loginWithFacebook: false,
+      friends: [],
+      yourInvitations: [],
+      invitations: [],
+    }).save((err) => {
       if(err){
         return next(err);
       }
-      if(result.length){
-        User.find().exec((err, result) => {
-          if(err){
-            return next(err);
-          }
-
-          return res.json({
-            err: 'Account for this email has already been created',
-          })
-        })
-      }else{
-        const user = new User({
-          email,
-          password: hashedPassword,
-          picture,
-          firstName,
-          lastName,
-          loginWithFacebook: false,
-          friends: [],
-          yourInvitations: [],
-          invitations: [],
-        }).save((err) => {
-          if(err){
-            return next(err);
-          }
-        })
-
-        return res.json({
-          title: 'success created account',
-        })
-      }
     })
+
+    return res
+      .redirect('http://localhost:3000/')
   }
 ]
 
@@ -60,10 +43,8 @@ exports.loginUser = [
     const {email, password} = req.body;
     const user = await User.findOne({email: email});
 
-    if(!user){
-      return res.json({
-        err: 'User not found',
-      })
+    if(user == null){
+      return res.redirect('http://localhost:3000/failedLogin')
     }
     try{
       if(await bcrypt.compare(password, user.password)){ 
@@ -82,17 +63,12 @@ exports.loginUser = [
           .cookie('JWT-TOKEN', accessToken, {
             sameSite: 'strict', 
             path: '/', 
-            expires: new Date(new Date().getTime() + 30 * 1000),
+            expires: new Date(new Date().getTime() + 1000000 * 1000),
             secure: true,
           })
-          .json({
-            title: 'success',
-          })
+          .redirect('http://localhost:3000/home')
       }else{
-        return res.json({
-          title: 'error',
-          err: 'Password is incorrect',
-        })
+        return res.redirect('http://localhost:3000/failedLogin')
       }
     }catch(err){
       console.log(err);
@@ -100,91 +76,35 @@ exports.loginUser = [
   }
 ]
 
-exports.facebookToken = (req, res, next) => {
+exports.facebookToken = async (req, res, next) => {
   if(localStorage.getItem('id')){
-    User.findOne({facebookId: localStorage.getItem('id')}).exec((err, result) => {
-      if(err){
-        return{
-          err: 'error',
-        }
-      }
+    const user = await User.findOne({facebookId: localStorage.getItem('id')});
 
-      const userObj = {
-        firstName: result.firstName,
-        lastName: result.lastName,
-        id: result._id,
-        friends: result.friends,
-        yourInvitations: result.yourInvitations,
-        invitations: result.invitations,
-      }
+    if(user == null){
+      return res.redirect('http://localhost:3000/failedLogin')
+    }
 
-      const accessToken = jwt.sign(userObj, process.env.SECRET_KEY);
-      localStorage.removeItem('id');
+    const userObj = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      id: user._id,
+      friends: user.friends,
+      yourInvitations: user.yourInvitations,
+      invitations: user.invitations,
+    }
 
-      return res
-        .cookie('JWT-TOKEN', accessToken, {
-          sameSite: 'strict', 
-          path: '/', 
-          expires: new Date(new Date().getTime() + 30 * 1000),
-          secure: true,
-        })
-        .redirect('/auth/refreshToken');
-    })
-  }else{
-    return res.redirect('/');
-  }
-}
+    const accessToken = jwt.sign(userObj, process.env.SECRET_KEY);
+    localStorage.removeItem('id');
 
-exports.refreshToken = (req, res, next) => {
-  let cookie = req.cookies['JWT-REFRESH-TOKEN'];
-
-  if(!req.cookies['JWT-REFRESH-TOKEN'] && !req.cookies['JWT-TOKEN']){
-    return res.json({
-      error: 'Not created token'
-    })
-  }
-
-  if(!cookie && req.cookies['JWT-TOKEN']){
-    jwt.verify(req.cookies['JWT-TOKEN'], process.env.SECRET_KEY, (err, user) => {
-      if(err){
-        return res.status(403).json({
-          title: 'Invalid refresh token',
-        })
-      }
-
-      const userObj = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        id: user._id,
-        friends: user.friends,
-        yourInvitations: user.yourInvitations,
-        invitations: user.invitations,
-      }
-      
-      const refreshToken = jwt.sign(userObj, process.env.REFRESH_TOKEN_KEY);
-  
-      return res
-        .cookie('JWT-REFRESH-TOKEN', refreshToken, {
-          sameSite: 'strict', 
-          path: '/', 
-          expires: new Date(new Date().getTime() + 1000000 * 1000),
-          secure: true,
-        })
-        .json({
-          user
-        })
+    return res
+      .cookie('JWT-TOKEN', accessToken, {
+        sameSite: 'strict', 
+        path: '/', 
+        expires: new Date(new Date().getTime() + 30 * 1000),
+        secure: true,
       })
-  }else{
-    jwt.verify(cookie, process.env.REFRESH_TOKEN_KEY, (err, user) => {
-      if(err){
-        return res.status(403).json({
-          title: 'Invalid refresh token',
-        })
-      }
-  
-      return res.json({
-        user
-      })
-    })
+      .redirect('http://localhost:3000/home')
   }
+    
+  return res.redirect('http://localhost:3000/failedLogin')
 }

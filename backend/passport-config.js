@@ -14,21 +14,20 @@ exports.facebookAuthenticationUser = (passport, res) => {
           err: 'not working'
         }
       }
-      if(!!result == false){
+      if(result == null){
         const user = new User({
           picture: profile._json.picture.data.url,
           firstName: profile._json.first_name,
           lastName: profile._json.last_name,
           loginWithFacebook: true,
           facebookId: profile._json.id,
+          password: process.env.FACEBOOK_PASSWORD,
           friends: [],
           yourInvitations: [],
           invitations: [],
         }).save((err) => {
           if(err){
-            return{
-              err,
-            }
+            console.log(err);
           }
         })
       }

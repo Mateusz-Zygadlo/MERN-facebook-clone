@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const isRefreshToken = (req, res, next) => {
-  if(req.cookies['JWT-REFRESH-TOKEN']){
+  if(req.cookies['JWT-TOKEN']){
     return next();
   }
 
@@ -22,9 +22,10 @@ router.get('/failed', isRefreshToken, (req, res) => {
 })
 
 router.get('/logout', isRefreshToken, (req, res) => {
-  res.clearCookie('JWT-REFRESH-TOKEN', {path: '/'})
-  req.logout();
-  res.redirect('/');
+  return res
+    .clearCookie('JWT-REFRESH-TOKEN', {path: '/'})
+    .logout()
+    .redirect('http://localhost:3000/')
 })
 
 module.exports = router;
