@@ -2,14 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .materialIcon {
+@layer components{
+  .materialIcon{
     @apply text-3xl text-blue-500 w-20 flex justify-center items-center ml-2 border-b-4 border-blue-500 cursor-pointer hover:bg-gray-400 transition-colors;
+  }
+  .textIndent{
+    text-indent: 10px;
   }
 }
 
-@layer utilities {
-  .textIndent {
+@layer utilities{
+  .textIndent{
     text-indent: 10px;
   }
 }

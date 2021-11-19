@@ -26,7 +26,7 @@ export const Navbar = ({ setOpenLeftBarFunc, openLeftBar }) => {
   });
 
   return(
-    <div className="fixed top-0 left-0 w-full h-16 bg-gray-300 flex justify-between">
+    <div className="fixed top-0 left-0 w-full h-16 bg-gray-300 flex justify-between z-10">
       <div className="flex justify-center items-center">
         {mobileWidth < 1300 ? 
           <>
@@ -44,7 +44,7 @@ export const Navbar = ({ setOpenLeftBarFunc, openLeftBar }) => {
       <div className="flex justify-end mr-4 items-center">
         <span onClick={()=>{setClose(!close)}} className="material-icons w-10 h-10 bg-gray-400 hover:bg-gray-500 text-3xl text-white rounded-full ml-5 flex justify-center items-center cursor-pointer" title="account">expand_more</span>
         {close ? 
-          <div className="bg-blue-300 w-48 absolute top-14 right-3 p-2">
+          <div className="bg-blue-300 w-48 fixed top-14 right-3 p-2 z-30">
             <div className="flex items-center hover:bg-gray-400 p-1 rounded-full cursor-pointer" title="me">
               <div className="w-10 h-10 bg-black rounded-full mr-2"></div>
               <h1 className="pr-1">Username</h1>
