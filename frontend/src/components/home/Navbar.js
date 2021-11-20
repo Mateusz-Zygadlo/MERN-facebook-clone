@@ -26,20 +26,20 @@ export const Navbar = ({ setOpenLeftBarFunc, openLeftBar }) => {
   });
 
   return(
-    <div className="fixed top-0 left-0 w-full h-16 bg-gray-300 flex justify-between z-10">
+    <div className="fixed top-0 left-0 w-full h-16 flex justify-between z-10 border-b-2 border-black bg-white">
       <div className="flex justify-center items-center">
         {mobileWidth < 1300 ? 
           <>
-            <img src={FacebookLogoMobile} alt="Facebook logo" className="h-14 cursor-pointer" title="home" />
-            <span onClick={()=>{setOpenLeftBarFunc(!openLeftBar)}} className="material-icons w-10 h-10 bg-gray-400 hover:bg-gray-500 text-2xl text-white rounded-full flex justify-center items-center cursor-pointer" title="account">menu</span>
+            <a href='/home'><img src={FacebookLogoMobile} alt="Facebook logo" className="h-14 cursor-pointer" title="home" /></a>
+            <span onClick={()=>{setOpenLeftBarFunc(!openLeftBar)}} className="material-icons w-10 h-10 bg-gray-400 hover:bg-gray-200 text-2xl text-white rounded-full flex justify-center items-center cursor-pointer" title="account">menu</span>
           </>
         :
           <img src={FacebookLogoMobile} alt="Facebook logo" className="h-14 cursor-pointer" title="home" />
         }
       </div>
       <div className="flex">
-        <span className="material-icons materialIcon" title="home page">home</span>
-        <span className="material-icons materialIcon" title="friends">people</span>
+        <a href='/home' className="materialIcon"><span className="material-icons text-3xl" title="home page">home</span></a>
+        <a href='/friends' className="materialIcon"><span className="material-icons text-3xl" title="friends">people</span></a>
       </div>
       <div className="flex justify-end mr-4 items-center">
         <span onClick={()=>{setClose(!close)}} className="material-icons w-10 h-10 bg-gray-400 hover:bg-gray-500 text-3xl text-white rounded-full ml-5 flex justify-center items-center cursor-pointer" title="account">expand_more</span>

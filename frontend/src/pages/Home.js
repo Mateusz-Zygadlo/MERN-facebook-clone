@@ -7,49 +7,7 @@ import { WelcomeBanner } from '../components/home/WelcomeBanner';
 import { CreatePost } from '../components/home/CreatePost';
 import { Post } from '../components/home/Post';
 
-export const Home = () => {
-  const [openLeftBar, setOpenLeftBar] = useState(true);
-  const [mobileWidth, setMobileWidth] = useState(1400);
-  const [newUser, setNewUser] = useState({});
-
-  const decodeUser = () => {
-    const userToken = document.cookie.split(' ')[0].split('=')[1];
-    if(!userToken){
-      return;
-    }
-    const decoded = jwt_decode(userToken);
-  
-    setNewUser({...decoded});
-  }
-  
-  const setOpenLeftBarFunc = (props) => {
-    setOpenLeftBar(props);
-  }
-
-  useEffect(() => {
-    const resizeFunc = () => {
-        if(window.innerWidth){
-          setMobileWidth(window.innerWidth);
-
-          if(mobileWidth < 1300){
-            setOpenLeftBarFunc(false);
-          }else{
-            setOpenLeftBarFunc(true);
-          }
-        }
-    }
-
-    window.addEventListener('resize', resizeFunc);
-
-    return () => {
-        window.removeEventListener('resize', resizeFunc);
-    }
-  });
-
-  useEffect(() => {
-    decodeUser()
-  }, [])
-
+export const Home = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser }) => {
   return(
     <div className="w-full h-screen">
       <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} />
