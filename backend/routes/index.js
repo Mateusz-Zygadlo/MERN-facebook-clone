@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController');
 
 const isRefreshToken = (req, res, next) => {
   if(req.cookies['JWT-TOKEN']){
@@ -28,5 +29,11 @@ router.get('/logout', isRefreshToken, (req, res) => {
     .clearCookie('JWT-TOKEN', {path: '/'})
     .redirect('http://localhost:3000/')
 })
+
+router.get('/friends', userController.friends);
+router.get('/profile/:id', userController.profile);
+router.post('/addInvitation/:id', userController.addInvitation);
+router.post('/cancelInvitation/:id', userController.cancelInvitation);
+router.post('/acceptInvitation/:id', userController.acceptInvitation);
 
 module.exports = router;

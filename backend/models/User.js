@@ -30,18 +30,18 @@ const UserSchema = new Schema({
     type: 'number',
     required: false,
   },
-  friends: {
-    type: 'array',
-    required: true,
-  },
-  yourInvitations: {
-    type: 'array',
-    required: true,
-  },
-  invitations: {
-    type: 'array',
-    required: true,
-  },
+  friends: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  yourInvitations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  invitations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
 })
 
 module.exports = mongoose.model('Users', UserSchema);

@@ -108,3 +108,80 @@ exports.facebookToken = async (req, res, next) => {
     
   return res.redirect('http://localhost:3000/failedLogin')
 }
+
+exports.friends = (req, res, next) => {
+  User.find().exec((err, result) => {
+    if(err){
+      return next(err)
+    }
+
+    return res.json({
+      result
+    })
+  })
+}
+
+exports.profile = (req, res, next) => {
+  const { id } = req.params;
+
+  User.findOne({_id: id}).exec((err, result) => {
+    if(err){
+      return next(err);
+    }
+
+    return res.json({
+      result
+    })
+  })
+}
+
+exports.addInvitation = [
+  (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.body.id
+
+    User.updateOne({_id: id}, { $push: { invitations: userId } }).exec((err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
+    })
+  }
+]
+
+exports.cancelInvitation = [
+  (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.body.id;
+
+    User.updateOne({_id: id}, { $pull: { invitations: userId } }).exec((err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
+    })
+  }
+]
+
+exports.acceptInvitation = [
+  (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.body.id;
+
+    User.updateOne({_id: id}, { $and: [{$pull: { invitations: userId }}, { $push: { friends: userId }}]}).exec((err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
+    })
+  }
+]
