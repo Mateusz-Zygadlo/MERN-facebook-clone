@@ -3,6 +3,7 @@ require('dotenv').config();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const async = require('async');
 
 exports.newUser = [
   async (req, res, next) => {
@@ -138,9 +139,16 @@ exports.profile = (req, res, next) => {
 exports.addInvitation = [
   (req, res, next) => {
     const { id } = req.params;
-    const userId = req.body.id
+    const userId = req.body.id;
 
-    User.updateOne({_id: id}, { $push: { invitations: userId } }).exec((err, result) => {
+    async.parallel({
+      owner: (callback) => {
+        User.updateOne({_id: userId}, { $push: { yourInvitations: id }}).exec(callback);
+      },
+      user: (callback) => {
+        User.updateOne({_id: id}, { $push: { invitations: userId }}).exec(callback);
+      }
+    }, (err, result) => {
       if(err){
         return next(err);
       }
@@ -157,7 +165,14 @@ exports.cancelInvitation = [
     const { id } = req.params;
     const userId = req.body.id;
 
-    User.updateOne({_id: id}, { $pull: { invitations: userId } }).exec((err, result) => {
+    async.parallel({
+      owner: (callback) => {
+        User.updateOne({_id: userId}, { $pull: { yourInvitations: id }}).exec(callback);
+      }, 
+      user: (callback) => {
+        User.updateOne({_id: id}, { $pull: { invitations: userId }}).exec(callback);
+      }
+    }, (err, result) => {
       if(err){
         return next(err);
       }
@@ -174,7 +189,20 @@ exports.acceptInvitation = [
     const { id } = req.params;
     const userId = req.body.id;
 
-    User.updateOne({_id: id}, { $and: [{$pull: { invitations: userId }}, { $push: { friends: userId }}]}).exec((err, result) => {
+    async.parallel({
+      deleteOwnerInvitation: (callback) => {
+        User.updateOne({_id: id}, { $pull: { yourInvitations: userId }}).exec(callback);
+      }, 
+      deleteUserInvitation: (callback) => {
+        User.updateOne({_id: userId}, { $pull: { invitations: id }}).exec(callback);
+      }, 
+      AddUserToFriends: (callback) => {
+        User.updateOne({_id: id}, { $push: { friends: userId }}).exec(callback);
+      }, 
+      AddOwnerToFriends: (callback) => {
+        User.updateOne({_id: userId}, { $push: { friends: id }}).exec(callback);
+      }
+    }, (err, result) => {
       if(err){
         return next(err);
       }
