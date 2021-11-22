@@ -16,7 +16,6 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
   const { id } = useParams();
 
   const getProfile = () => {
-    setProfile(null);
     axios.get(`http://localhost:8000/profile/${id}`)
       .then((res) => setProfile(res.data))
   }
@@ -28,28 +27,28 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
   }
   const sendInvitation = () => {
     axios.post(`http://localhost:8000/addInvitation/${profile.result._id}`, newUser)
-    
-    return actualData()
+
+    return window.location.reload();
   }
   const cancelInvitation = () => {
     axios.post(`http://localhost:8000/cancelInvitation/${profile.result._id}`, newUser)
-      
-    return actualData()
+
+    return window.location.reload();
   }
   const acceptInvitation = () => {
     axios.post(`http://localhost:8000/acceptInvitation/${profile.result._id}`, newUser)
-    
-    return actualData()
+
+    return window.location.reload();
   }
   const deleteInvitation = () => {
-    axios.post(`http://localhost:8000/deleteInvitation/${profile.result._id}`, newUser);
+    axios.post(`http://localhost:8000/deleteInvitation/${profile.result._id}`, newUser)
 
-    return actualData();
+    return window.location.reload();
   }
   const deleteFriend = () => {
     axios.post(`http://localhost:8000/deleteFriend/${profile.result._id}`, newUser)
-    
-    return actualData()
+
+    return window.location.reload();
   }
 
   const isFriendsFunc = () => {
@@ -63,7 +62,7 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
   }
   const isYourInvitation = () => {
     const test = actualUser.result.yourInvitations.filter((user) => user == profile.result._id);
-
+    
     if(test.length){
       setYourInvitation(true);
     }else{
@@ -72,7 +71,7 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
   }
   const isInvitation = () => {
     const test = actualUser.result.invitations.filter((user) => user == profile.result._id);
-
+    
     if(test.length){
       setInvitation(true);
     }else{
@@ -85,13 +84,17 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
     getActualUser();
   }
 
-  useEffect(() => {
+  const userFriends = () => {
     if(actualUser && actualUser.result && profile && profile.result){
       isFriendsFunc();
       isYourInvitation();
       isInvitation();
     }
-  }, [actualUser, profile]);
+  }
+
+  useEffect(() => {
+    userFriends();
+  }, [profile, actualUser])
 
   useEffect(() => {
     actualData();
