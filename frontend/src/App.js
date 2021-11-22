@@ -34,7 +34,7 @@ const GuestRoute = ({ children }) => {
 export const App = () => {
   const [openLeftBar, setOpenLeftBar] = useState(true);
   const [mobileWidth, setMobileWidth] = useState(1400);
-  const [newUser, setNewUser] = useState({});
+  const [newUser, setNewUser] = useState(null);
   
   const setOpenLeftBarFunc = (props) => {
     setOpenLeftBar(props);
@@ -114,7 +114,11 @@ export const App = () => {
           path='/home'
           element={
             <PrivateRoute>
-              <Home setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              {newUser ?
+                <Home setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              :  
+                <div>Loading...</div>
+              }
             </PrivateRoute>
           } />
         <Route
@@ -122,7 +126,11 @@ export const App = () => {
           path='/profile/:id'
           element={
             <PrivateRoute>
-              <Profile setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              {newUser ? 
+                <Profile setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              :
+                <div>Loading...</div>
+              }
             </PrivateRoute>
           } />
         <Route
@@ -130,7 +138,11 @@ export const App = () => {
           path='/friends'
           element={
             <PrivateRoute>
-              <Friends setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              {newUser ? 
+                <Friends setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              :
+                <div>Loading...</div>
+              }
             </PrivateRoute>
           } />
         <Route
@@ -138,7 +150,11 @@ export const App = () => {
           path='/findFriends'
           element={
             <PrivateRoute>
-              <FindFriends setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              {newUser ?
+                <FindFriends setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+              :
+                <div>Loading...</div>
+              }
             </PrivateRoute>
           } />
       </Routes>

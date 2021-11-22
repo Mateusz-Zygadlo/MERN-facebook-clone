@@ -213,3 +213,51 @@ exports.acceptInvitation = [
     })
   }
 ]
+
+exports.deleteInvitation = [
+  (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.body.id;
+
+    async.parallel({
+      deleteOwnerInvitation: (callback) => {
+        User.updateOne({_id: id}, { $pull: { yourInvitations: userId }}).exec(callback);
+      }, 
+      deleteUserInvitation: (callback) => {
+        User.updateOne({_id: userId}, { $pull: { invitations: id }}).exec(callback);
+      }, 
+    }, (err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
+    })
+  }
+]
+
+exports.deleteFriend = [
+  (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.body.id;
+
+    async.parallel({
+      owner: (callback) => {
+        User.updateOne({_id: userId}, { $pull: { friends: id }}).exec(callback);
+      },
+      user: (callback) => {
+        User.updateOne({_id: id}, { $pull: { friends: userId }}).exec(callback);
+      }
+    }, (err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
+    })
+  }
+]
