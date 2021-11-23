@@ -30,7 +30,9 @@ router.get('/logout', isRefreshToken, (req, res) => {
     .redirect('http://localhost:3000/')
 })
 
-router.get('/friends', userController.friends);
+router.post('/findFriends', userController.findFriends);
+router.post('/friends', userController.friends);
+router.post('/invitations', userController.invitations);
 router.get('/profile/:id', userController.profile);
 router.post('/addInvitation/:id', userController.addInvitation);
 router.post('/cancelInvitation/:id', userController.cancelInvitation);

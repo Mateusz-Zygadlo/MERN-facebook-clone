@@ -1,24 +1,23 @@
 import { useState, useEffect } from "react";
-import { Navbar } from "../components/home/Navbar";
 import { LeftBar } from '../components/home/LeftBar';
 import { Friend } from "../components/Friend";
 import axios from "axios";
 
-export const FindFriends = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser }) => {
+export const FindFriends = ({ openLeftBar, mobileWidth, newUser }) => {
   const [responseData, setResponseData] = useState(null);
 
   const getFriends = () => {
-    axios.get('http://localhost:8000/friends')
+    axios.post('http://localhost:8000/findFriends', {id: newUser.id})
       .then((res) => setResponseData(res.data))
   }
 
   useEffect(() => {
+    console.log(newUser);
     getFriends();
   }, [])
 
   return(
     <div className="w-full h-screen">
-      <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} />
       <div className="mt-16">
         {openLeftBar ? <LeftBar /> : null}
         <div className={mobileWidth < 1300 ? "pt-5 flex justify-center flex-col" : "ml-60 mr-72 flex justify-center flex-col"}>
@@ -27,9 +26,15 @@ export const FindFriends = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newU
             <div className="grid sm:grid-cols-1 md:grid-cols-2">
               {responseData && responseData.result ? 
                 <>
-                  {responseData.result.map((item) => (
-                    <Friend firstName={item.firstName} lastName={item.lastName} id={item._id} /> 
-                  ))}
+                  {responseData.result.length == 0 ?
+                    <div>Not found yours</div>
+                  :
+                    <>
+                      {responseData.result.map((item) => (
+                        <Friend key={item._id} firstName={item.firstName} lastName={item.lastName} id={item._id} /> 
+                      ))}
+                    </>
+                  }
                 </>
               :
                 <div>Loading</div>

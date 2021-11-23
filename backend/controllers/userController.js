@@ -110,17 +110,21 @@ exports.facebookToken = async (req, res, next) => {
   return res.redirect('http://localhost:3000/failedLogin')
 }
 
-exports.friends = (req, res, next) => {
-  User.find().exec((err, result) => {
-    if(err){
-      return next(err)
-    }
+exports.findFriends = [
+  (req, res, next) => {
+    const { id } = req.body;
 
-    return res.json({
-      result
+    User.find({ _id: { $ne: id, }, friends: { $ne: id, }}).exec((err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result,
+      })
     })
-  })
-}
+  }
+]
 
 exports.profile = (req, res, next) => {
   const { id } = req.params;
@@ -275,3 +279,35 @@ exports.friendRequests = (req, res, next) => {
     })
   })
 }
+
+exports.friends = [
+  (req, res, next) => {
+    const { id } = req.body;
+
+    User.find({friends: id}).exec((err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
+    })
+  }
+]
+
+exports.invitations = [
+  (req, res, next) => {
+    const { id } = req.body;
+
+    User.find({yourInvitations: id}).exec((err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
+    })
+  }
+]

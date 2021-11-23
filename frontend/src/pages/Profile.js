@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Navbar } from "../components/home/Navbar";
 import { LeftBar } from '../components/home/LeftBar';
 import { Post } from "../components/home/Post";
 import axios from 'axios';
 
-export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser }) => {
+export const Profile = ({ openLeftBar, mobileWidth, newUser }) => {
   const [profile, setProfile] = useState(null);
   const [actualUser, setActualUser] = useState({...newUser});
   
   const [isFriend, setIsFriend] = useState(false);
   const [yourInvitation, setYourInvitation] = useState(false);
   const [invitation, setInvitation] = useState(false);
+  const [yourProfile, setYourProfile] = useState(false);
   
   const { id } = useParams();
 
@@ -78,6 +78,13 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
       setInvitation(false);
     }
   }
+  const isYourProfile = () => {
+    if(newUser && newUser.id && newUser.id == id){
+      setYourProfile(true);
+    }else{
+      setYourProfile(false);
+    }
+  }
 
   const actualData = () => {
     getProfile();
@@ -89,6 +96,7 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
       isFriendsFunc();
       isYourInvitation();
       isInvitation();
+      isYourProfile();
     }
   }
 
@@ -102,7 +110,6 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
 
   return(
     <div className="w-full h-screen">
-      <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} />
       {profile && profile.result ? 
         <div className="mt-16">
           {openLeftBar ? <LeftBar /> : null}
@@ -111,7 +118,9 @@ export const Profile = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser 
               <div className="h-40 w-40 bg-black rounded-full mx-auto"></div>
               <h1 className="text-3xl flex justify-center mt-3">{profile.result.firstName} {profile.result.lastName}</h1>
               <div className="flex justify-center mt-3">
-                {isFriend ? 
+                {yourProfile ?
+                  <div className="border-2 border-black hover:border-blue-300 px-2 py-1 transition-colors">Your profile</div>
+                : isFriend ? 
                   <button className="border-2 border-black hover:border-blue-300 px-2 py-1 transition-colors" onClick={deleteFriend}>Remove friend</button>
                 : yourInvitation ?
                   <button className="border-2 border-black hover:border-blue-300 px-2 py-1 transition-colors" onClick={cancelInvitation}>Cancel send invitation</button>

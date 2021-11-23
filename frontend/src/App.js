@@ -9,6 +9,7 @@ import { Home } from './pages/Home';
 import { Profile } from './pages/Profile';
 import { Friends } from './pages/Friends';
 import { FindFriends } from './pages/FindFriends';
+import { Navbar } from './components/home/Navbar';
   
 const decodeUser = () => {
   const userToken = document.cookie.split(' ')[0].split('=')[1];
@@ -115,7 +116,10 @@ export const App = () => {
           element={
             <PrivateRoute>
               {newUser ?
-                <Home setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                <>
+                  <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} newUser={newUser} />
+                  <Home openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                </>
               :  
                 <div>Loading...</div>
               }
@@ -127,7 +131,10 @@ export const App = () => {
           element={
             <PrivateRoute>
               {newUser ? 
-                <Profile setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                <>
+                  <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} />
+                  <Profile openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                </> 
               :
                 <div>Loading...</div>
               }
@@ -139,7 +146,10 @@ export const App = () => {
           element={
             <PrivateRoute>
               {newUser ? 
-                <Friends setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                <>
+                  <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} />
+                  <Friends openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                </>
               :
                 <div>Loading...</div>
               }
@@ -151,7 +161,10 @@ export const App = () => {
           element={
             <PrivateRoute>
               {newUser ?
-                <FindFriends setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                <>
+                  <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} />
+                  <FindFriends openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                </>
               :
                 <div>Loading...</div>
               }
