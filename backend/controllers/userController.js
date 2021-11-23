@@ -261,3 +261,17 @@ exports.deleteFriend = [
     })
   }
 ]
+
+exports.friendRequests = (req, res, next) => {
+  const { id } = req.params;
+
+  User.find({yourInvitations: id}).exec((err, result) => {
+    if(err){
+      return next(err);
+    }
+
+    return res.json({
+      result
+    })
+  })
+}

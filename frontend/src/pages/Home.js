@@ -16,7 +16,7 @@ export const Home = ({ setOpenLeftBarFunc, openLeftBar, mobileWidth, newUser }) 
           <CreatePost id={newUser.id} firstName={newUser.firstName} />
           <Post />
         </div>
-        {mobileWidth < 1300 ? null : <FriendRequestsBar />}
+        {mobileWidth < 1300 ? null : <FriendRequestsBar newUser={newUser} />}
       </div>
     </div>
   )

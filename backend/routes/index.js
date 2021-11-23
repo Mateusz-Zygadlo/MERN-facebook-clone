@@ -37,5 +37,6 @@ router.post('/cancelInvitation/:id', userController.cancelInvitation);
 router.post('/acceptInvitation/:id', userController.acceptInvitation);
 router.post('/deleteFriend/:id', userController.deleteFriend);
 router.post('/deleteInvitation/:id', userController.deleteInvitation);
+router.get('/friendRequests/:id', userController.friendRequests)
 
 module.exports = router;
