@@ -31,7 +31,7 @@ export const FriendRequestsBar = ({ newUser }) => {
   }, [])
   
   return(
-    <div className="fixed right-0 bg-gray-200 pb-5 z-0">
+    <div className="fixed right-0 bg-white border-b-2 border-l-2 border-black pb-5 z-0">
       {friendRequests && friendRequests.result ?
         <>
           {friendRequests.result.map((user) => (

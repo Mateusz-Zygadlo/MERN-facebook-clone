@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const Post = ({ postId, id }) => {
+export const Post = ({ postId, id, firstName, lastName, date, description, likes = [{name:'test'},{name:'test'},{name:'test'}], comments, addLike }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return(
@@ -8,14 +8,14 @@ export const Post = ({ postId, id }) => {
       <div className="flex items-center">
         <div className="w-10 h-10 bg-black rounded-full"></div>
         <div className="ml-5 flex flex-col">
-          <h1 className="text-lg">Mateusz Żygadło</h1>
-          <p className="text-sm">10.11.2021</p>
+          <h1 className="text-lg">{firstName} {lastName}</h1>
+          <p className="text-sm">{date}</p>
         </div>
       </div>
-      <p className="mt-2 text-lg">This is a post text</p>
-      <p className="mt-5 text-lg">0 likes</p>
+      <p className="mt-2 text-lg">{description}</p>
+      <p className="mt-5 text-lg">{likes.length} likes</p>
       <div className="mt-3 flex justify-around border-t-2 border-b-2 border-black py-2">
-        <button className="border-2 border-black hover:border-blue-300 transition-colors px-3 py-1">Like</button>
+        <button className="border-2 border-black hover:border-blue-300 transition-colors px-3 py-1" value={postId} onClick={addLike}>Like</button>
         <button className="border-2 border-black hover:border-blue-300 transition-colors px-3 py-1" onClick={()=>{setIsOpen(!isOpen)}}>Comment</button>
       </div>
       {isOpen ? 

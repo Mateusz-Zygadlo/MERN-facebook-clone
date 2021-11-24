@@ -36,7 +36,7 @@ export const Navbar = ({ setOpenLeftBarFunc, openLeftBar, newUser }) => {
         {mobileWidth < 1300 ? 
           <>
             <a href='/home'><img src={FacebookLogoMobile} alt="Facebook logo" className="h-14 cursor-pointer" title="home" /></a>
-            <span onClick={()=>{setOpenLeftBarFunc(!openLeftBar)}} className="material-icons w-10 h-10 bg-gray-400 hover:bg-gray-200 text-2xl text-white rounded-full flex justify-center items-center cursor-pointer" title="account">menu</span>
+            <span onClick={()=>{setOpenLeftBarFunc(!openLeftBar)}} className="material-icons w-10 h-10 text-2xl border-2 border-black rounded-full flex justify-center items-center cursor-pointer" title="account">menu</span>
           </>
         :
           <img src={FacebookLogoMobile} alt="Facebook logo" className="h-14 cursor-pointer" title="home" />
@@ -47,12 +47,12 @@ export const Navbar = ({ setOpenLeftBarFunc, openLeftBar, newUser }) => {
         <a href='/friends' className="materialIcon"><span className="material-icons text-3xl" title="friends">people</span></a>
       </div>
       <div className="flex justify-end mr-4 items-center">
-        <span onClick={()=>{setClose(!close)}} className="material-icons w-10 h-10 bg-gray-400 hover:bg-gray-500 text-3xl text-white rounded-full ml-5 flex justify-center items-center cursor-pointer" title="account">expand_more</span>
+        <span onClick={()=>{setClose(!close)}} className="material-icons w-10 h-10 text-3xl rounded-full ml-5 flex justify-center items-center cursor-pointer" title="account">expand_more</span>
         {close ? 
-          <div className="bg-blue-300 w-48 fixed top-14 right-3 p-2 z-30">
+          <div className="w-48 fixed top-14 right-3 p-2 z-30 backdrop-filter bg-white border-2 border-black">
             {actualUser && actualUser.id ? 
               <a href={`/profile/${newUser.id}`}>
-                <div className="flex items-center hover:bg-gray-400 p-1 rounded-full cursor-pointer" title="me">
+                <div className="flex items-center hover:bg-gray-200 p-1 rounded-full cursor-pointer" title="me">
                   <div className="w-10 h-10 bg-black rounded-full mr-2"></div>
                   <h1 className="pr-1">{newUser.firstName} {newUser.lastName}</h1>
                 </div>

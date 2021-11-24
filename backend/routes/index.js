@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const postController = require('../controllers/postController');
 
 const isRefreshToken = (req, res, next) => {
   if(req.cookies['JWT-TOKEN']){
@@ -39,6 +40,10 @@ router.post('/cancelInvitation/:id', userController.cancelInvitation);
 router.post('/acceptInvitation/:id', userController.acceptInvitation);
 router.post('/deleteFriend/:id', userController.deleteFriend);
 router.post('/deleteInvitation/:id', userController.deleteInvitation);
-router.get('/friendRequests/:id', userController.friendRequests)
+router.get('/friendRequests/:id', userController.friendRequests);
+router.post('/newPost/:id', postController.newPost);
+router.get('/friendsPosts/:id', postController.friendPosts);
+router.get('/ownerPosts/:id', postController.ownerPosts);
+router.post('/like/:id', postController.like);
 
 module.exports = router;
