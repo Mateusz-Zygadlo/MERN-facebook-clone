@@ -5,7 +5,7 @@ export const FailedLogin = () => {
 
   setTimeout(() => {
     return history('/');
-  }, 2000)
+  }, 1250)
 
   return(
     <div className="w-screen h-screen flex justify-center items-center bg-black">

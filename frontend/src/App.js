@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './pages/login/Login';
@@ -75,6 +76,13 @@ export const App = () => {
     }
   });
 
+  const addLike = (e) => {
+    axios.post(`http://localhost:8000/like/${e.target.value}`, {id: newUser.id})
+      .then((res) => console.log(res.data))
+
+    return window.location.reload();
+  }
+
   return(
     <BrowserRouter>
       <Routes>
@@ -118,7 +126,7 @@ export const App = () => {
               {newUser ?
                 <>
                   <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} newUser={newUser} />
-                  <Home openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                  <Home openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} addLike={addLike} />
                 </>
               :  
                 <div>Loading...</div>
@@ -133,7 +141,7 @@ export const App = () => {
               {newUser ? 
                 <>
                   <Navbar setOpenLeftBarFunc={setOpenLeftBarFunc} openLeftBar={openLeftBar} />
-                  <Profile openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} />
+                  <Profile openLeftBar={openLeftBar} mobileWidth={mobileWidth} newUser={newUser} addLike={addLike} />
                 </> 
               :
                 <div>Loading...</div>

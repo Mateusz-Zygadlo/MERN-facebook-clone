@@ -16,6 +16,8 @@ export const FriendRequestsBar = ({ newUser }) => {
       .then((res) => console.log(res.data))
     
     friendRequestsFunc();
+
+    return window.location.reload();
   }
   const deleteInvitation = (e) => {
     const userInvitation = e.target.dataset.id;
@@ -24,6 +26,8 @@ export const FriendRequestsBar = ({ newUser }) => {
       .then((res) => console.log(res.data))
 
     friendRequestsFunc();
+
+    return window.location.reload();
   }
   
   useEffect(() => {

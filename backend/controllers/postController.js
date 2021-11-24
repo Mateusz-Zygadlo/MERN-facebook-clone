@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
 const Post = require('../models/Post');
+const Comment = require('../models/Comment');
 const User = require('../models/User');
 const dayjs = require('dayjs')
 dayjs().format();
@@ -60,15 +60,9 @@ exports.friendPosts = (req, res, next) => {
 exports.ownerPosts = (req, res, next) => {
   const { id } = req.params;
 
-  Post.findOne({author: id}).exec((err, result) => {
+  Post.find({author: id}).exec((err, result) => {
     if(err){
       return next(err);
-    }
-
-    if(result == null){
-      return res.json({
-        result: []
-      })
     }
 
     return res.json({
@@ -108,6 +102,36 @@ exports.like = [
           })
         })
       }
+    })
+  }
+]
+
+exports.postComments = (req, res, next) => {
+  const { id } = req.params;
+
+  Comment.find({postId: id}).exec((err, result) => {
+    if(err){
+      return next(err);
+    }
+
+    return res.json({
+      result
+    })
+  })
+}
+
+exports.deletePost = [
+  (req, res, next) => {
+    const { id } = req.params;
+
+    Post.deleteOne({_id: id}).exec((err, result) => {
+      if(err){
+        return next(err);
+      }
+
+      return res.json({
+        result
+      })
     })
   }
 ]

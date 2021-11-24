@@ -6,7 +6,7 @@ import { CreatePost } from '../components/home/CreatePost';
 import { Post } from '../components/home/Post';
 import axios from 'axios';
 
-export const Home = ({ openLeftBar, mobileWidth, newUser }) => {
+export const Home = ({ openLeftBar, mobileWidth, newUser, addLike }) => {
   const [posts, setPosts] = useState(null);
   const [ownerPosts, setOwnerPosts] = useState(null);
 
@@ -19,10 +19,6 @@ export const Home = ({ openLeftBar, mobileWidth, newUser }) => {
       .then((res) => setOwnerPosts(res.data))
       .then(() => console.log(true))
   }
-  const addLike = (e) => {
-    axios.post(`http://localhost:8000/like/${e.target.value}`, {id: newUser.id})
-      .then((res) => console.log(res.data))
-  }
 
   useEffect(() => {
     getOwnerPosts();
@@ -30,7 +26,7 @@ export const Home = ({ openLeftBar, mobileWidth, newUser }) => {
   }, [])
 
   return(
-    <div className="w-full h-screen">
+    <div className="w-full">
       <div className="flex mt-16">
         {openLeftBar ? <LeftBar /> : null}
         <div className={mobileWidth < 1300 ? "w-full pt-5 flex justify-center flex-col" : "ml-60 w-full mr-72 flex justify-center flex-col"}>
@@ -52,12 +48,14 @@ export const Home = ({ openLeftBar, mobileWidth, newUser }) => {
                         key={post._id}
                         postId={post._id}
                         id={newUser.id}
+                        authorId={post.author}
                         firstName={post.firstName} 
                         lastName={post.lastName}
                         date={post.date}
                         description={post.description}
                         likes={post.likes}
                         addLike={addLike}
+                        isAuthor={true}
                       />
                     ))}
                   </>
@@ -83,12 +81,14 @@ export const Home = ({ openLeftBar, mobileWidth, newUser }) => {
                         key={post._id}
                         postId={post._id}
                         id={newUser.id}
+                        authorId={post.author}
                         firstName={post.firstName} 
                         lastName={post.lastName}
                         date={post.date}
                         description={post.description}
                         likes={post.likes}
                         addLike={addLike}
+                        isAuthor={false}
                       />
                     ))}
                   </>

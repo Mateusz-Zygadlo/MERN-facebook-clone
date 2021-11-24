@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const postController = require('../controllers/postController');
+const commentsController = require('../controllers/commentsController');
 
 const isRefreshToken = (req, res, next) => {
   if(req.cookies['JWT-TOKEN']){
@@ -45,5 +46,9 @@ router.post('/newPost/:id', postController.newPost);
 router.get('/friendsPosts/:id', postController.friendPosts);
 router.get('/ownerPosts/:id', postController.ownerPosts);
 router.post('/like/:id', postController.like);
+router.post('/addComment', commentsController.addComment);
+router.get('/postComments/:id', postController.postComments);
+router.post('/deleteComment/:id', commentsController.deleteComment);
+router.post('/deletePost/:id', postController.deletePost);
 
 module.exports = router;

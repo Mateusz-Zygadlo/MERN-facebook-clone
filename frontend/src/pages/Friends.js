@@ -22,7 +22,7 @@ export const Friends = ({ openLeftBar, mobileWidth, newUser }) => {
   }, [])
 
   return(
-    <div className="w-full h-screen">
+    <div className="w-full">
       <div className="mt-16">
         {openLeftBar ? <LeftBar /> : null}
         <div className={mobileWidth < 1300 ? "pt-5 flex justify-center flex-col" : "ml-60 mr-72 flex justify-center flex-col"}>

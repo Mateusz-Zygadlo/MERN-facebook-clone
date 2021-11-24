@@ -4,8 +4,9 @@ import { LeftBar } from '../components/home/LeftBar';
 import { Post } from "../components/home/Post";
 import axios from 'axios';
 
-export const Profile = ({ openLeftBar, mobileWidth, newUser }) => {
+export const Profile = ({ openLeftBar, mobileWidth, newUser, addLike }) => {
   const [profile, setProfile] = useState(null);
+  const [profilePosts, setProfilePosts] = useState(null);
   const [actualUser, setActualUser] = useState({...newUser});
   
   const [isFriend, setIsFriend] = useState(false);
@@ -17,13 +18,20 @@ export const Profile = ({ openLeftBar, mobileWidth, newUser }) => {
 
   const getProfile = () => {
     axios.get(`http://localhost:8000/profile/${id}`)
-      .then((res) => setProfile(res.data))
+      .then((res) => {
+        setProfile(res.data)
+        getProfilePosts(res.data.result._id)
+      })
   }
   const getActualUser = () => {
     if(actualUser && actualUser.id){
       axios.get(`http://localhost:8000/profile/${actualUser.id}`)
         .then((res) => setActualUser(res.data))
     }
+  }
+  const getProfilePosts = (id) => {
+    axios.get(`http://localhost:8000/ownerPosts/${id}`)
+      .then((res) => setProfilePosts(res.data))
   }
   const sendInvitation = () => {
     axios.post(`http://localhost:8000/addInvitation/${profile.result._id}`, newUser)
@@ -109,7 +117,7 @@ export const Profile = ({ openLeftBar, mobileWidth, newUser }) => {
   }, [])
 
   return(
-    <div className="w-full h-screen">
+    <div className="w-full">
       {profile && profile.result ? 
         <div className="mt-16">
           {openLeftBar ? <LeftBar /> : null}
@@ -135,7 +143,48 @@ export const Profile = ({ openLeftBar, mobileWidth, newUser }) => {
               </div>
             </div>
             <div>
-              {profile.result ? <Post /> : <div>Add to friends to see user's posts</div> }
+              {profilePosts && profilePosts.result ?
+                <>
+                  {profilePosts.result.length == 0 ? 
+                    <h1 className="text-3xl flex justify-center">No posts</h1>
+                  :
+                    <>
+                      {profilePosts.result.map((post) => (
+                        post.author == newUser.id ?
+                          <Post
+                            key={post._id}
+                            postId={post._id}
+                            id={newUser.id}
+                            authorId={post.author}
+                            firstName={post.firstName} 
+                            lastName={post.lastName}
+                            date={post.date}
+                            description={post.description}
+                            likes={post.likes}
+                            addLike={addLike}
+                            isAuthor={true}
+                          />
+                        :
+                          <Post
+                            key={post._id}
+                            postId={post._id}
+                            id={newUser.id}
+                            authorId={post.author}
+                            firstName={post.firstName} 
+                            lastName={post.lastName}
+                            date={post.date}
+                            description={post.description}
+                            likes={post.likes}
+                            addLike={addLike}
+                            isAuthor={false}
+                          />
+                      ))}
+                    </>
+                  }
+                </>
+              :
+                <div>Add to friends to see user's posts</div>
+              }
             </div>
           </div>
         </div>
